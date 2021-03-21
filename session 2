@@ -1,0 +1,80 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+
+df=pd.read_csv('train.csv')
+
+df.head()
+
+df.info()
+
+df.describe()
+
+Note:
+
+Item Visibility must be >0?
+
+
+1- Percentage of every outlet type
+
+2-Which Category has the max average retail price
+
+3- Correlation between Item_MRP and Item outlet sales
+
+4- corrleation between visibilty and sales
+
+5- establishment year with Oultlet sales
+
+6-which item type with outlet type with sales
+
+7-item weight with item type with sales 
+
+df['Item_Weight'].plot(kind='hist')
+
+df['Outlet_Type'].value_counts().plot(kind='pie',autopct='%0.01f');
+
+df['Item_Type'].value_counts().plot(kind='pie',autopct='%0.01f',figsize=(10,10));
+
+df_item=df.groupby(['Outlet_Type','Item_Type']).mean()['Item_Outlet_Sales'].to_frame()
+df_item
+
+for outlet in df_item:
+    print(df_item.index[0][0])
+
+df['Item_Fat_Content'].value_counts()
+
+df.Item_Fat_Content.replace(['low fat', 'LF'], 'Low Fat', inplace=True)
+
+df.Item_Fat_Content.replace(['LF','low fat'],'Low Fat')
+
+
+df.Item_Fat_Content.replace('reg', 'Regular', inplace=True)
+
+df.describe(All)
+
+item_means = dict(df.groupby(['Item_Type'])['Item_Weight'].mean())
+item_means
+
+for index, row in df.iterrows():  
+    try:
+        if row['Item_Weight'] == np.nan:
+            t = row['Item_Type']
+            df.loc[index,'Item_Weight'] = item_means.get(t)
+    except IndexError:
+        df.loc[index,'Item_Weight'] = 0
+    
+
+df.info()
+
+df.Item_Weight.value_counts()
+
+data= df.groupby(['Item_Type', 'Item_Weight'])['Item_Outlet_Sales'].mean().to_frame().reset_index()
+data
+
+df.groupby(['Outlet_Type', 'Item_Type'])['Item_Outlet_Sales'].sum().to_frame()
+
+
+df.groupby(['Outlet_Type', 'Item_Type'])['Item_Outlet_Sales'].max().to_frame().reset_index()
+
